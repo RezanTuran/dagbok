@@ -6,8 +6,6 @@ import swal from 'sweetalert';
 const Nav = () => {
   let history = useHistory();
 
-  const getUserNameFromLocalStorAge = localStorage.getItem('auth_name');
-
   const logoutSubmit = (e: any) => {
     e.preventDefault();
 
@@ -49,7 +47,6 @@ const Nav = () => {
         >
           Logout
         </button>
-        <span>{getUserNameFromLocalStorAge}</span>
       </li>
     );
   }
