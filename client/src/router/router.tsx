@@ -11,7 +11,7 @@ const Router = () => {
   return (
     <Switch>
       <Route exact path="/" component={Home} />
-      <Route path="/dashboard" component={Diary}>
+      <Route path="/diary" component={Diary}>
         {localStorage.getItem('auth_token') ? <Diary /> : <Login />}
       </Route>
 

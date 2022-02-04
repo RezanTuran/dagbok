@@ -82,6 +82,20 @@ class DiaryController extends Controller
 
 
     public function store(Request $request){
+        
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:191',
+            'date' => 'required|max:50',
+            'desc' => 'required|min:1',
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->messages()
+            ]);
+        }
+        
         $diary = new Diary;
         $diary -> title = $request->input('title');
         $diary -> date = $request->input('date');

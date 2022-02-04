@@ -26,7 +26,7 @@ const EditDiary = (props: any) => {
         setDiary(res.data.message);
       } else if (res.data.status === 404) {
         swal('Error', res.data.message, 'error');
-        history.push('/dashboard');
+        history.push('/diary');
       }
       setLoading(false);
     });
@@ -61,7 +61,7 @@ const EditDiary = (props: any) => {
                 <h4>
                   Edit Book
                   <Link
-                    to={'/dashboard'}
+                    to={'/diary'}
                     className="btn btn-primary btn-sm float-end"
                   >
                     Back

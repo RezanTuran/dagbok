@@ -26,6 +26,8 @@ const AddDiary = () => {
       setDiary({
         ...diary,
       });
+    } else if (res.data.status === 422) {
+      swal('All fields are mandetory', '', 'error');
     }
   };
 
@@ -39,7 +41,7 @@ const AddDiary = () => {
                 <h4>
                   Add Book
                   <Link
-                    to={'/dashboard'}
+                    to={'/diary'}
                     className="btn btn-primary btn-sm float-end"
                   >
                     Back
