@@ -9,15 +9,15 @@ Route::post('register', [AuthController::class, 'register']);
 
 Route::post('login', [AuthController::class, 'login']);
 
-Route::post('add-diary', [DiaryController::class, 'store']);
+Route::post('add-diary', [DiaryController::class, 'addDiary']);
 
-Route::get('view-diary', [DiaryController::class, 'index']);
+Route::get('view-diary', [DiaryController::class, 'viewDiary']);
 
-Route::get('edit-diary/{id}', [DiaryController::class, 'edit']);
+Route::get('edit-diary/{id}', [DiaryController::class, 'editDiary']);
 
 Route::post('update-diary/{id}', [DiaryController::class, 'update']);
 
-Route::delete('delete-diary/{id}', [DiaryController::class, 'remove']);
+Route::delete('delete-diary/{id}', [DiaryController::class, 'deleteDiary']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);

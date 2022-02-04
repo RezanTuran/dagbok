@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class DiaryController extends Controller
 {
 
-    public function index(){
+    public function viewDiary(){
         $diarys = Diary::all();
         return response()->json([
             'status' => 200,
@@ -18,7 +18,7 @@ class DiaryController extends Controller
         ]);
     }
 
-    public function edit($id){
+    public function editDiary($id){
         $diary = Diary::find($id);
         if($diary){
             return response()->json([
@@ -69,7 +69,7 @@ class DiaryController extends Controller
     }
     }
 
-    public function remove($id){
+    public function deleteDiary($id){
         $diary = Diary::find($id);
         $diary->delete();
 
@@ -81,7 +81,7 @@ class DiaryController extends Controller
 
 
 
-    public function store(Request $request){
+    public function addDiary(Request $request){
         
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:191',
