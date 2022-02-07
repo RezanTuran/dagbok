@@ -14,7 +14,10 @@ const Nav = () => {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('auth_name');
         swal('Success', res.data.message, 'success');
-        history.push('/');
+        setTimeout(() => {
+          history.push('/login');
+          window.location.reload();
+        }, 1000);
       }
     });
   };
@@ -69,14 +72,7 @@ const Nav = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className="nav-link " aria-current="page" to="/">
-                Home
-              </Link>
-            </li>
-            {AuthButtons}
-          </ul>
+          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">{AuthButtons}</ul>
         </div>
       </div>
     </nav>

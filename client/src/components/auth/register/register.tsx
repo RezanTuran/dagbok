@@ -33,7 +33,10 @@ const Register = () => {
           localStorage.setItem('auth_token', res.data.token);
           localStorage.setItem('auth_name', res.data.username);
           swal('Success', res.data.message, 'success');
-          history.push('/');
+          setTimeout(() => {
+            history.push('/diary');
+            window.location.reload();
+          }, 1000);
         } else {
           setRegister({
             ...registerInput,

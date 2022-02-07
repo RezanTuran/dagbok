@@ -38,6 +38,10 @@ const EditDiary = (props: any) => {
 
     const res = await Axios.post(`/api/update-diary/${diary_id}`, diary);
     if (res.data.status === 200) {
+      setTimeout(() => {
+        history.push('/diary');
+        window.location.reload();
+      }, 1000);
       swal('Success', res.data.message, 'success');
     } else if (res.data.status === 422) {
       swal('All fields are mandetory', '', 'error');

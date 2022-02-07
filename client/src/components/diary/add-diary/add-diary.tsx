@@ -1,9 +1,11 @@
 import Axios from 'axios';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
 
 const AddDiary = () => {
+  let history = useHistory();
+
   const [diary, setDiary]: any = useState({
     title: '',
     date: '',
@@ -23,6 +25,10 @@ const AddDiary = () => {
     const res = await Axios.post('/api/add-diary', diary);
     if (res.data.status === 200) {
       swal('Success', res.data.message, 'success');
+      setTimeout(() => {
+        history.push('/diary');
+        window.location.reload();
+      }, 1000);
       setDiary({
         ...diary,
       });
@@ -74,13 +80,14 @@ const AddDiary = () => {
 
                   <div className="form-group mb-3">
                     <label>Text</label>
-                    <input
-                      type="text"
+                    <textarea
+                      className="form-control"
+                      id="exampleFormControlTextarea1"
+                      rows={15}
                       name="desc"
                       value={diary.desc}
                       onChange={handleInput}
-                      className="form-control"
-                    />
+                    ></textarea>
                   </div>
 
                   <div className="form-group mb-3">
