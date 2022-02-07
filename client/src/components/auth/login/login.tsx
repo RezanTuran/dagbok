@@ -1,11 +1,26 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
-import Nav from '../../navbar';
+import {
+  Grid,
+  TextField,
+  Button,
+  InputAdornment,
+  Box,
+  useMediaQuery,
+} from '@material-ui/core';
+import { AccountCircleOutlined, LockOutlined } from '@material-ui/icons';
+import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
+import Alert from '@mui/material/Alert';
+import useStyles from './styles';
+import Logo from '../../../assets/diaryLogo.png';
 
 const Login = () => {
+  const isMobile = useMediaQuery('(min-width:736px)');
   const history = useHistory();
+  const classes = useStyles();
+
   const [loginInput, setLogin]: any = useState({
     email: String,
     password: String,
@@ -30,10 +45,13 @@ const Login = () => {
         if (res.data.status === 200) {
           localStorage.setItem('auth_token', res.data.token);
           localStorage.setItem('auth_name', res.data.username);
-          swal('Success', res.data.message, 'success');
-          history.push('/diary');
+          Swal.fire('Inloggad', '', 'success');
+          setTimeout(() => {
+            history.push('/diary');
+            window.location.reload();
+          }, 1000);
         } else if (res.data.status === 401) {
-          swal('Warning', res.data.message, 'warning');
+          Swal.fire('Användaren hittades inte', '', 'warning');
         } else {
           setLogin({ ...loginInput, error_list: res.data.validation_errors });
         }
@@ -42,52 +60,88 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <Nav />
-      <div className="container py-5">
-        <div className="row justify-content-center">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-header">
-                <h4>Login</h4>
-              </div>
-              <div className="card-body">
-                <form onSubmit={loginSubmit}>
-                  <div className="form-group mb-3">
-                    <label>Email</label>
-                    <input
-                      name="email"
-                      type="email"
-                      onChange={handleInput}
-                      value={loginInput.email}
-                      className="form-control"
-                    />
-                    <span>{loginInput.error_list.email}</span>
-                  </div>
-                  <div className="form-group mb-3">
-                    <label>Password</label>
-                    <input
-                      name="password"
-                      type="password"
-                      onChange={handleInput}
-                      value={loginInput.password}
-                      className="form-control"
-                    />
-                    <span>{loginInput.error_list.password}</span>
-                  </div>
+    <Grid>
+      <Grid container className={classes.container}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          className={isMobile ? classes.imgGridDesktop : classes.imgGridMobile}
+        ></Grid>
+        <Grid
+          container
+          alignItems="center"
+          direction="column"
+          justifyContent="space-between"
+          item
+          xs={12}
+          sm={6}
+          style={{ padding: 10 }}
+        >
+          <Grid />
+          <Box className={classes.box} component="form" onSubmit={loginSubmit}>
+            <Grid container justifyContent="center">
+              <img src={Logo} width={200} alt="Logo" />
+            </Grid>
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              onChange={handleInput}
+              value={loginInput.email}
+              margin="normal"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircleOutlined />
+                  </InputAdornment>
+                ),
+              }}
+            />
 
-                  <div className="form-group mb-3">
-                    <button type="submit" className="btn btn-primary">
-                      Login
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            {loginInput.error_list.email ? (
+              <Alert severity="error">Vänlingen skriv ditt email adress</Alert>
+            ) : (
+              ''
+            )}
+
+            <TextField
+              name="password"
+              type="password"
+              label="Lösenord"
+              onChange={handleInput}
+              value={loginInput.password}
+              margin="normal"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockOutlined />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {loginInput.error_list.password ? (
+              <Alert severity="error">Vänlingen skriv dit lösenord</Alert>
+            ) : (
+              ''
+            )}
+            <Grid style={{ height: 20 }} />
+            <Button
+              endIcon={<LoginOutlinedIcon />}
+              color="primary"
+              variant="contained"
+              type="submit"
+              className={classes.loginButton}
+            >
+              Logga in
+            </Button>
+            <Grid style={{ height: 20 }} />
+            <Button>Registrera dig</Button>
+          </Box>
+          <Grid />
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 
