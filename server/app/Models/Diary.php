@@ -14,5 +14,4 @@ class Diary extends Model
         "date",
         "desc",
     ];
-    
 }
