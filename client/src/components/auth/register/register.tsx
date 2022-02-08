@@ -56,7 +56,7 @@ const Register = () => {
         if (res.data.status === 200) {
           localStorage.setItem('auth_token', res.data.token);
           localStorage.setItem('auth_name', res.data.username);
-          swal('Success', res.data.message, 'success');
+          swal('Konto Skapades', '', 'success');
           setTimeout(() => {
             history.push('/diary');
             window.location.reload();
