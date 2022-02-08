@@ -1,10 +1,18 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Axios from 'axios';
 import swal from 'sweetalert';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 
 const Nav = () => {
   let history = useHistory();
+  const getNameFromLocalStorage = localStorage.getItem('auth_name');
 
   const logoutSubmit = (e: any) => {
     e.preventDefault();
@@ -26,56 +34,51 @@ const Nav = () => {
 
   if (!localStorage.getItem('auth_token')) {
     AuthButtons = (
-      <ul className="navbar-nav">
-        <li className="nav-item">
-          <Link className="nav-link" to="/login">
-            Login
-          </Link>
-        </li>
-
-        <li className="nav-item">
-          <Link className="nav-link" to="/register">
-            Register
-          </Link>
-        </li>
-      </ul>
+      <Button
+        type="button"
+        style={{ backgroundColor: '#FFC745', color: '#9D0606' }}
+        variant="contained"
+        onClick={() => history.push('/login')}
+        endIcon={<LoginOutlinedIcon />}
+      >
+        Logga in
+      </Button>
     );
   } else {
     AuthButtons = (
-      <li className="nav-item">
-        <button
+      <>
+        <Button
+          style={{ backgroundColor: '#FFC745', color: '#9D0606' }}
           type="button"
-          className="nav-link btn btn-danger btn-sm text-white"
+          variant="contained"
           onClick={logoutSubmit}
+          endIcon={<LogoutOutlinedIcon />}
         >
-          Logout
-        </button>
-      </li>
+          Logga ut
+        </Button>
+        <Typography style={{ color: '#FFC745' }} marginLeft="10px">
+          {getNameFromLocalStorage}
+        </Typography>
+      </>
     );
   }
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow stickt-top">
-      <div className="container">
-        <Link className="navbar-brand" to="/">
-          Navbar
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">{AuthButtons}</ul>
-        </div>
-      </div>
-    </nav>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static" style={{ backgroundColor: '#9D0606' }}>
+        <Toolbar>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1 }}
+            style={{ color: '#FFC745' }}
+          >
+            Dagbok
+          </Typography>
+          <Button>{AuthButtons}</Button>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 };
 
