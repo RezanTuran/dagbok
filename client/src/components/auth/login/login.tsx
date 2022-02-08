@@ -32,6 +32,10 @@ const Login = () => {
     setLogin({ ...loginInput, [e.target.name]: e.target.value });
   };
 
+  const register = () => {
+    history.push('/register');
+  };
+
   const loginSubmit = (e: any) => {
     e.preventDefault();
 
@@ -136,7 +140,7 @@ const Login = () => {
               Logga in
             </Button>
             <Grid style={{ height: 20 }} />
-            <Button>Registrera dig</Button>
+            <Button onClick={register}>Registrera dig</Button>
           </Box>
           <Grid />
         </Grid>
