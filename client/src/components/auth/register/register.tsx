@@ -2,10 +2,29 @@ import React, { useState } from 'react';
 import Axios from 'axios';
 import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
-import Nav from '../../navbar';
+import {
+  Grid,
+  TextField,
+  Button,
+  InputAdornment,
+  Box,
+  useMediaQuery,
+} from '@material-ui/core';
+import {
+  AccountCircleOutlined,
+  LockOutlined,
+  AlternateEmailOutlined,
+} from '@material-ui/icons';
+import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
+import Alert from '@mui/material/Alert';
+import useStyles from './styles';
+import Logo from '../../../assets/diaryLogo.png';
 
 const Register = () => {
+  const isMobile = useMediaQuery('(min-width:736px)');
   const history = useHistory();
+  const classes = useStyles();
+
   const [registerInput, setRegister]: any = useState({
     name: String,
     email: String,
@@ -16,6 +35,10 @@ const Register = () => {
   const handleInput = (e: any) => {
     e.persist();
     setRegister({ ...registerInput, [e.target.name]: e.target.value });
+  };
+
+  const login = () => {
+    history.push('./login');
   };
 
   const registerSubmit = (e: any) => {
@@ -48,60 +71,116 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <Nav />
-      <div className="container py-5">
-        <div className="row justify-content-center">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-header">
-                <h4>Register</h4>
-              </div>
-              <div className="card-body">
-                <form onSubmit={registerSubmit}>
-                  <div className="form-group mb-3">
-                    <label>Name</label>
-                    <input
-                      name="name"
-                      value={registerInput.name}
-                      onChange={handleInput}
-                      className="form-control"
-                    />
-                    <span>{registerInput.error_list.name}</span>
-                  </div>
-                  <div className="form-group mb-3">
-                    <label>Email</label>
-                    <input
-                      name="email"
-                      onChange={handleInput}
-                      value={registerInput.email}
-                      className="form-control"
-                    />
-                    <span>{registerInput.error_list.email}</span>
-                  </div>
-                  <div className="form-group mb-3">
-                    <label>Password</label>
-                    <input
-                      name="password"
-                      onChange={handleInput}
-                      value={registerInput.password}
-                      className="form-control"
-                    />
-                    <span>{registerInput.error_list.password}</span>
-                  </div>
+    <Grid>
+      <Grid container className={classes.container}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          className={isMobile ? classes.imgGridDesktop : classes.imgGridMobile}
+        ></Grid>
+        <Grid
+          container
+          alignItems="center"
+          direction="column"
+          justifyContent="space-between"
+          item
+          xs={12}
+          sm={6}
+          style={{ padding: 10 }}
+        >
+          <Grid />
+          <Box
+            className={classes.box}
+            component="form"
+            onSubmit={registerSubmit}
+          >
+            <Grid container justifyContent="center">
+              <img src={Logo} width={200} alt="Logo" />
+            </Grid>
+            <TextField
+              label="Namn"
+              name="name"
+              type="text"
+              onChange={handleInput}
+              value={registerInput.name}
+              margin="normal"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircleOutlined />
+                  </InputAdornment>
+                ),
+              }}
+            />
 
-                  <div className="form-group mb-3">
-                    <button type="submit" className="btn btn-primary">
-                      Register
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            {registerInput.error_list.name ? (
+              <Alert severity="error">Vänlingen skriv ditt namn</Alert>
+            ) : (
+              ''
+            )}
+
+            <TextField
+              name="email"
+              type="email"
+              label="Email"
+              onChange={handleInput}
+              value={registerInput.email}
+              margin="normal"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AlternateEmailOutlined />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {registerInput.error_list.email ? (
+              <Alert severity="error">Vänlingen skriv ditt email adress</Alert>
+            ) : (
+              ''
+            )}
+
+            <TextField
+              name="password"
+              type="password"
+              label="Lösenord"
+              onChange={handleInput}
+              value={registerInput.password}
+              margin="normal"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockOutlined />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {registerInput.error_list.password ? (
+              <Alert severity="error">
+                Lösenordets längd måste vara minst 8{' '}
+              </Alert>
+            ) : (
+              ''
+            )}
+
+            <Grid style={{ height: 20 }} />
+            <Button
+              endIcon={<LoginOutlinedIcon />}
+              color="primary"
+              variant="contained"
+              type="submit"
+              className={classes.registerButton}
+            >
+              Registrera dig
+            </Button>
+            <Grid style={{ height: 20 }} />
+            <Button onClick={login}>Logga in i stället</Button>
+          </Box>
+          <Grid />
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 
