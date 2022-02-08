@@ -1,15 +1,29 @@
 import Axios from 'axios';
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
+import {
+  Grid,
+  TextField,
+  Button,
+  useMediaQuery,
+  TextareaAutosize,
+  Box,
+} from '@material-ui/core';
+import Nav from '../../navbar';
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
+import useStyles from './styles';
 
 const AddDiary = () => {
   let history = useHistory();
+  const classes = useStyles();
+  const isMobile = useMediaQuery('(min-width:736px)');
 
   const [diary, setDiary]: any = useState({
-    title: '',
-    date: '',
-    desc: '',
+    title: String,
+    date: String,
+    desc: String,
   });
 
   const handleInput = (e: any) => {
@@ -33,75 +47,64 @@ const AddDiary = () => {
         ...diary,
       });
     } else if (res.data.status === 422) {
-      swal('All fields are mandetory', '', 'error');
+      swal('Vänligen fyll i alla fält ', '', 'error');
     }
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-header">
-                <h4>
-                  Add Book
-                  <Link
-                    to={'/diary'}
-                    className="btn btn-primary btn-sm float-end"
-                  >
-                    Back
-                  </Link>
-                </h4>
-              </div>
-              <div className="card-body">
-                <form onSubmit={saveDiary}>
-                  <div className="form-group mb-3">
-                    <label>Title</label>
-                    <input
-                      type="text"
-                      name="title"
-                      value={diary.title}
-                      onChange={handleInput}
-                      className="form-control"
-                    />
-                  </div>
+    <Grid>
+      <Nav />
+      <Box onSubmit={saveDiary} component="form" className={classes.box}>
+        <Grid className={isMobile ? classes.gridDesktop : classes.gridMobile}>
+          <TextField
+            type="text"
+            name="title"
+            value={diary.title}
+            onChange={handleInput}
+            id="outlined-basic"
+            placeholder="Rubrik"
+            variant="outlined"
+            className={classes.input}
+          />
+          <TextField
+            type="date"
+            name="date"
+            value={diary.date}
+            onChange={handleInput}
+            id="outlined-basic"
+            variant="outlined"
+            className={classes.input}
+          />
 
-                  <div className="form-group mb-3">
-                    <label>Datum</label>
-                    <input
-                      type="date"
-                      name="date"
-                      value={diary.date}
-                      onChange={handleInput}
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="form-group mb-3">
-                    <label>Text</label>
-                    <textarea
-                      className="form-control"
-                      id="exampleFormControlTextarea1"
-                      rows={15}
-                      name="desc"
-                      value={diary.desc}
-                      onChange={handleInput}
-                    ></textarea>
-                  </div>
-
-                  <div className="form-group mb-3">
-                    <button type="submit" className="btn btn-primary">
-                      Spara
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          <TextareaAutosize
+            rows={20}
+            name="desc"
+            value={diary.desc}
+            onChange={handleInput}
+            className={classes.input}
+            placeholder="Skriv din bok här..."
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            className={classes.button}
+            endIcon={<SaveOutlinedIcon />}
+          >
+            Spara
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={() => history.push('/diary')}
+            startIcon={<ArrowBackOutlinedIcon />}
+          >
+            Tillbaka
+          </Button>
+        </Grid>
+      </Box>
+    </Grid>
   );
 };
 
