@@ -1,10 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Axios from 'axios';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Grid from '@material-ui/core/Grid';
+import LinearProgress from '@mui/material/LinearProgress';
+import useStyles from './styles';
+import { useMediaQuery } from '@material-ui/core';
+import DiaryIcon from '../../../assets/diaryIcon.png';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 const ViewDiary = () => {
+  const history = useHistory();
+  const classes = useStyles();
+  const isMobile = useMediaQuery('(min-width:736px)');
+
   const [viewDiary, setViewDiary] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isReadMore, setIsReadMore] = useState<boolean>(true);
 
   useEffect(() => {
     Axios.get(`/api/view-diary`).then((res) => {
@@ -16,78 +34,67 @@ const ViewDiary = () => {
   }, []);
 
   const deleteDiary = async (e: any, id: any) => {
-    const thidClicked = e.currentTarget;
-    thidClicked.innerText = 'Deleting';
     const res = await Axios.delete(`/api/delete-diary/${id}`);
-
     if (res.data.status === 200) {
-      thidClicked.closest('tr').remove();
+      window.location.reload();
     }
   };
 
-  var display_DiaryData: any = '';
-
   if (loading) {
-    return <h4>View Diarys Loading...</h4>;
+    return <LinearProgress color="secondary" />;
   } else {
-    display_DiaryData = viewDiary.map((item: any, index: any) => {
-      return (
-        <tr key={index}>
-          <td>{item.id}</td>
-          <td>{item.title}</td>
-          <td>{item.desc}</td>
-          <td>{item.date}</td>
-          <td>
-            <Link
-              to={`edit-diary/${item.id}`}
-              className="btn btn-success btn-sm"
-            >
-              Edit
-            </Link>
-          </td>
-          <td>
-            <button
-              type="button"
-              className="btn btn-danger btn-sm"
-              onClick={(e) => deleteDiary(e, item.id)}
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-      );
-    });
+    return (
+      <Grid
+        className={
+          isMobile ? classes.containerDesktop : classes.containerMobile
+        }
+      >
+        {viewDiary.map((item: any, index: any) => {
+          return (
+            <Card sx={{ maxWidth: 345 }} className={classes.card} key={index}>
+              <CardMedia
+                component="img"
+                alt="diary icon"
+                height="240"
+                image={DiaryIcon}
+                style={{
+                  width: 'auto',
+                }}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {item.title}
+                </Typography>
+                <Typography variant="body2">{item.date}</Typography>
+                <br />
+                <Typography variant="body2" color="text.secondary">
+                  {isReadMore ? item.desc.slice(0, 250) : item.desc}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  type="button"
+                  size="small"
+                  onClick={(e) => deleteDiary(e, item.id)}
+                  endIcon={<DeleteOutlinedIcon />}
+                >
+                  Ta Bort
+                </Button>
+                <Button
+                  type="button"
+                  size="small"
+                  onClick={() => history.push(`edit-diary/${item.id}`)}
+                  endIcon={<EditOutlinedIcon />}
+                >
+                  Redigera
+                </Button>
+              </CardActions>
+            </Card>
+          );
+        })}
+      </Grid>
+    );
   }
-
-  return (
-    <div className="card px-4 mt-3">
-      <div className="card-header">
-        <h4>
-          View Books
-          <Link to={'add-diary'} className="btn btn-primary btn-sm float-end">
-            Add Book
-          </Link>
-        </h4>
-      </div>
-      <div className="card-body">
-        <div className="table-responsive">
-          <table className="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Desc</th>
-                <th>Date</th>
-                <th>Edit</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>{display_DiaryData}</tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
 };
 
 export default ViewDiary;
