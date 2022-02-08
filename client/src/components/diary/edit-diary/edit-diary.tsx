@@ -15,6 +15,7 @@ import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import useStyles from './styles';
 import LinearProgress from '@mui/material/LinearProgress';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { Helmet } from 'react-helmet';
 
 const EditDiary = (props: any) => {
   const history = useHistory();
@@ -77,6 +78,9 @@ const EditDiary = (props: any) => {
 
   return (
     <Grid>
+      <Helmet>
+        <title>Dagbok | Redigera Dagbok</title>
+      </Helmet>
       <Nav />
       <Box onSubmit={updateDiary} component="form" className={classes.box}>
         <Grid className={isMobile ? classes.gridDesktop : classes.gridMobile}>

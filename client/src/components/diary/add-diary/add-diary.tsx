@@ -14,6 +14,7 @@ import Nav from '../../navbar';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import useStyles from './styles';
+import { Helmet } from 'react-helmet';
 
 const AddDiary = () => {
   let history = useHistory();
@@ -56,6 +57,9 @@ const AddDiary = () => {
 
   return (
     <Grid>
+      <Helmet>
+        <title>Dagbok | Skapa Ny Dagbok</title>
+      </Helmet>
       <Nav />
       <Box onSubmit={saveDiary} component="form" className={classes.box}>
         <Grid className={isMobile ? classes.gridDesktop : classes.gridMobile}>

@@ -15,6 +15,7 @@ import DiaryIcon from '../../../assets/diaryIcon.png';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
+import { Helmet } from 'react-helmet';
 
 const ViewDiary = () => {
   const history = useHistory();
@@ -48,6 +49,9 @@ const ViewDiary = () => {
   } else {
     return (
       <Grid>
+        <Helmet>
+          <title>Dagbok | Dagböcker</title>
+        </Helmet>
         <Grid
           container
           justifyContent="center"

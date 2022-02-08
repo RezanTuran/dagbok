@@ -19,6 +19,7 @@ import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import Alert from '@mui/material/Alert';
 import useStyles from './styles';
 import Logo from '../../../assets/diaryLogo.png';
+import { Helmet } from 'react-helmet';
 
 const Register = () => {
   const isMobile = useMediaQuery('(min-width:736px)');
@@ -72,6 +73,9 @@ const Register = () => {
 
   return (
     <Grid>
+      <Helmet>
+        <title>Dagbok | Registrera</title>
+      </Helmet>
       <Grid container className={classes.container}>
         <Grid
           item
