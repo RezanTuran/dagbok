@@ -115,7 +115,7 @@ const Register = () => {
             />
 
             {registerInput.error_list.name ? (
-              <Alert severity="error">Vänlingen skriv ditt namn</Alert>
+              <Alert severity="error">Vänligen skriv ditt namn</Alert>
             ) : (
               ''
             )}
