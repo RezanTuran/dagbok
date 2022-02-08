@@ -45,7 +45,7 @@ const Login = () => {
     };
 
     Axios.get('/sanctum/csrf-cookie').then((response) => {
-      Axios.post(`api/login`, data).then((res) => {
+      Axios.post(process.env.REACT_APP_API_LOGIN || '', data).then((res) => {
         if (res.data.status === 200) {
           localStorage.setItem('auth_token', res.data.token);
           localStorage.setItem('auth_name', res.data.username);

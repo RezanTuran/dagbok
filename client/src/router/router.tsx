@@ -10,23 +10,31 @@ import EditDiary from '../components/diary/edit-diary';
 const Router = () => {
   return (
     <Switch>
-      <Route exact path="/" component={Home} />
+      <Route exact path="/" component={Home}>
+        {localStorage.getItem('auth_token') ? <Diary /> : <Login />}
+      </Route>
       <Route path="/diary" component={Diary}>
         {localStorage.getItem('auth_token') ? <Diary /> : <Login />}
       </Route>
 
       <Route path="/login">
-        {localStorage.getItem('auth_token') ? <Redirect to="/" /> : <Login />}
+        {localStorage.getItem('auth_token') ? (
+          <Redirect to="/diary" />
+        ) : (
+          <Login />
+        )}
       </Route>
 
       <Route path="/register">
         {localStorage.getItem('auth_token') ? (
-          <Redirect to="/" />
+          <Redirect to="/diary" />
         ) : (
           <Register />
         )}
       </Route>
-      <Route path="/add-diary" component={AddDiary}></Route>
+      <Route path="/add-diary" component={AddDiary}>
+        {localStorage.getItem('auth_token') ? <AddDiary /> : <Login />}
+      </Route>
       <Route path="/edit-diary/:id" component={EditDiary}></Route>
     </Switch>
   );

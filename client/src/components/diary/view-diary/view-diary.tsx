@@ -26,7 +26,7 @@ const ViewDiary = () => {
   const [isReadMore, setIsReadMore] = useState<boolean>(true);
 
   useEffect(() => {
-    Axios.get(`/api/view-diary`).then((res) => {
+    Axios.get(process.env.REACT_APP_API_VIEW_DIARY || '').then((res) => {
       if (res.data.status === 200) {
         setViewDiary(res.data.diarys);
         setLoading(false);
@@ -35,7 +35,9 @@ const ViewDiary = () => {
   }, []);
 
   const deleteDiary = async (e: any, id: any) => {
-    const res = await Axios.delete(`/api/delete-diary/${id}`);
+    const res = await Axios.delete(
+      `${process.env.REACT_APP_API_DELETE_DIARY}/${id}`
+    );
     if (res.data.status === 200) {
       window.location.reload();
     }
@@ -93,6 +95,7 @@ const ViewDiary = () => {
                     size="small"
                     onClick={(e) => deleteDiary(e, item.id)}
                     endIcon={<DeleteOutlinedIcon />}
+                    style={{ color: '#9D0606' }}
                   >
                     Ta Bort
                   </Button>
@@ -101,6 +104,7 @@ const ViewDiary = () => {
                     size="small"
                     onClick={() => history.push(`edit-diary/${item.id}`)}
                     endIcon={<EditOutlinedIcon />}
+                    style={{ color: '#9D0606' }}
                   >
                     Redigera
                   </Button>

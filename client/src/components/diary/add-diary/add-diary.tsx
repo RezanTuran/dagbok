@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 import {
   Grid,
   TextField,
@@ -36,9 +36,12 @@ const AddDiary = () => {
   const saveDiary = async (e: any) => {
     e.preventDefault();
 
-    const res = await Axios.post('/api/add-diary', diary);
+    const res = await Axios.post(
+      process.env.REACT_APP_API_ADD_DIARY || '',
+      diary
+    );
     if (res.data.status === 200) {
-      swal('Success', res.data.message, 'success');
+      Swal.fire('Ny dagbok sparat', '', 'success');
       setTimeout(() => {
         history.push('/diary');
         window.location.reload();
@@ -47,7 +50,7 @@ const AddDiary = () => {
         ...diary,
       });
     } else if (res.data.status === 422) {
-      swal('Vänligen fyll i alla fält ', '', 'error');
+      Swal.fire('Vänligen fyll i alla fält ', '', 'error');
     }
   };
 

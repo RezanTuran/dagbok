@@ -1,14 +1,29 @@
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import swal from 'sweetalert';
+import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import {
+  Grid,
+  TextField,
+  Button,
+  useMediaQuery,
+  TextareaAutosize,
+  Box,
+} from '@material-ui/core';
+import Nav from '../../navbar';
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
+import useStyles from './styles';
+import LinearProgress from '@mui/material/LinearProgress';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 const EditDiary = (props: any) => {
   const history = useHistory();
+  const classes = useStyles();
+  const isMobile = useMediaQuery('(min-width:736px)');
   const [diary, setDiary]: any = useState({
-    title: '',
-    date: '',
-    desc: '',
+    title: String,
+    date: String,
+    desc: String,
   });
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -21,104 +36,99 @@ const EditDiary = (props: any) => {
 
   useEffect(() => {
     const diary_id = props.match.params.id;
-    Axios.get(`/api/edit-diary/${diary_id}`).then((res) => {
-      if (res.data.status === 200) {
-        setDiary(res.data.message);
-      } else if (res.data.status === 404) {
-        swal('Error', res.data.message, 'error');
-        history.push('/diary');
+    Axios.get(`${process.env.REACT_APP_API_EDIT_DIARY}/${diary_id}`).then(
+      (res) => {
+        if (res.data.status === 200) {
+          setDiary(res.data.message);
+        } else if (res.data.status === 404) {
+          Swal.fire('Dagboken hittades inte', '', 'error');
+          history.push('/diary');
+        }
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    );
   }, [props.match.params.id, history]);
 
   const updateDiary = async (e: any) => {
     e.preventDefault();
     const diary_id = props.match.params.id;
 
-    const res = await Axios.post(`/api/update-diary/${diary_id}`, diary);
+    const res = await Axios.post(
+      `${process.env.REACT_APP_API_UPDATE_DIARY}/${diary_id}`,
+      diary
+    );
     if (res.data.status === 200) {
       setTimeout(() => {
         history.push('/diary');
         window.location.reload();
       }, 1000);
-      swal('Success', res.data.message, 'success');
+      Swal.fire('Dagbok uppdaterat', '', 'success');
     } else if (res.data.status === 422) {
-      swal('All fields are mandetory', '', 'error');
+      Swal.fire('Vänligen fyll i alla fält', '', 'error');
     } else if (res.data.status === 404) {
-      swal('Error', res.data.message, 'error');
+      Swal.fire('Dagboken hittades inte', '', 'error');
       history.push('/view-diary');
     }
   };
 
   if (loading) {
-    return <h4>Edit Diary Data Loading...</h4>;
+    return <LinearProgress color="secondary" />;
   }
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-header">
-                <h4>
-                  Edit Book
-                  <Link
-                    to={'/diary'}
-                    className="btn btn-primary btn-sm float-end"
-                  >
-                    Back
-                  </Link>
-                </h4>
-              </div>
-              <div className="card-body">
-                <form onSubmit={updateDiary}>
-                  <div className="form-group mb-3">
-                    <label>Title</label>
-                    <input
-                      type="text"
-                      name="title"
-                      value={diary.title}
-                      onChange={handleInput}
-                      className="form-control"
-                    />
-                  </div>
+    <Grid>
+      <Nav />
+      <Box onSubmit={updateDiary} component="form" className={classes.box}>
+        <Grid className={isMobile ? classes.gridDesktop : classes.gridMobile}>
+          <TextField
+            type="text"
+            name="title"
+            value={diary.title}
+            onChange={handleInput}
+            id="outlined-basic"
+            placeholder="Rubrik"
+            variant="outlined"
+            className={classes.input}
+          />
+          <TextField
+            type="date"
+            name="date"
+            value={diary.date}
+            onChange={handleInput}
+            id="outlined-basic"
+            variant="outlined"
+            className={classes.input}
+          />
 
-                  <div className="form-group mb-3">
-                    <label>Datum</label>
-                    <input
-                      type="date"
-                      name="date"
-                      value={diary.date}
-                      onChange={handleInput}
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="form-group mb-3">
-                    <label>Text</label>
-                    <input
-                      type="text"
-                      name="desc"
-                      value={diary.desc}
-                      onChange={handleInput}
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="form-group mb-3">
-                    <button type="submit" className="btn btn-primary">
-                      Spara
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          <TextareaAutosize
+            minRows={20}
+            name="desc"
+            value={diary.desc}
+            onChange={handleInput}
+            className={classes.input}
+            placeholder="Skriv din bok här..."
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            className={classes.button}
+            endIcon={<EditOutlinedIcon />}
+          >
+            Uppdatera
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={() => history.push('/diary')}
+            startIcon={<ArrowBackOutlinedIcon />}
+          >
+            Tillbaka
+          </Button>
+        </Grid>
+      </Box>
+    </Grid>
   );
 };
 

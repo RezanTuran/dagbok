@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Axios from 'axios';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -21,7 +21,7 @@ const Nav = () => {
       if (res.data.status === 200) {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('auth_name');
-        swal('Success', res.data.message, 'success');
+        Swal.fire('Utloggad', '', 'success');
         setTimeout(() => {
           history.push('/login');
           window.location.reload();
@@ -56,7 +56,12 @@ const Nav = () => {
         >
           Logga ut
         </Button>
-        <Typography style={{ color: '#FFC745' }} marginLeft="10px">
+
+        <Typography
+          style={{ color: '#FFC745' }}
+          marginLeft="10px"
+          onClick={() => history.push('/diary')}
+        >
           {getNameFromLocalStorage}
         </Typography>
       </>
