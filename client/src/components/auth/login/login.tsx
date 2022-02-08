@@ -104,7 +104,7 @@ const Login = () => {
             />
 
             {loginInput.error_list.email ? (
-              <Alert severity="error">Vänlingen skriv ditt email adress</Alert>
+              <Alert severity="error">Vänligen skriv ditt email adress</Alert>
             ) : (
               ''
             )}
