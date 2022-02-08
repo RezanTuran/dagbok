@@ -78,7 +78,7 @@ const Nav = () => {
             sx={{ flexGrow: 1 }}
             style={{ color: '#FFC745' }}
           >
-            Dagbok
+            Dag bok
           </Typography>
           <Button>{AuthButtons}</Button>
         </Toolbar>

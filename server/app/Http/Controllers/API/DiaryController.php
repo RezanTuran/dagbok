@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Diary;
 use Illuminate\Support\Facades\Validator;
-
 class DiaryController extends Controller
 {
 
@@ -95,7 +94,6 @@ class DiaryController extends Controller
                 'errors' => $validator->messages()
             ]);
         }
-        
         $diary = new Diary;
         $diary -> title = $request->input('title');
         $diary -> date = $request->input('date');
@@ -107,4 +105,5 @@ class DiaryController extends Controller
             'message' => 'Diary Added Successfully',
         ]);
     }
+
 }
