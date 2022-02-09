@@ -24,7 +24,6 @@ const ViewDiary = () => {
 
   const [viewDiary, setViewDiary] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isReadMore, setIsReadMore] = useState<boolean>(true);
 
   useEffect(() => {
     Axios.get(process.env.REACT_APP_API_VIEW_DIARY || '').then((res) => {
@@ -90,7 +89,7 @@ const ViewDiary = () => {
                   <Typography variant="body2">{item.date}</Typography>
                   <br />
                   <Typography variant="body2" color="text.secondary">
-                    {isReadMore ? item.desc.slice(0, 250) : item.desc}
+                    {item.desc.slice(0, 250)}
                   </Typography>
                 </CardContent>
                 <CardActions>
